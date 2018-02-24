@@ -8,8 +8,6 @@ module FormCore::Concerns
       NAME_REGEX = /\A[a-z_][a-z_0-9]*\z/
 
       included do
-        enum accessibility: {read_and_write: 0, readonly: 1, hidden: 2},
-             _prefix: :access
 
         serialize :validations
         serialize :options
@@ -19,22 +17,15 @@ module FormCore::Concerns
                   uniqueness: {scope: :form},
                   exclusion: {in: FormCore.reserved_names},
                   format: {with: NAME_REGEX}
-        validates :accessibility,
-                  inclusion: {in: self.accessibilities.keys.map(&:to_sym)}
 
         after_initialize do
           self.validations ||= {}
           self.options ||= {}
-          self.accessibility ||= "read_and_write"
         end
       end
 
       def name
         self[:name]&.to_sym
-      end
-
-      def accessibility
-        self[:accessibility]&.to_sym
       end
 
       def stored_type
@@ -48,34 +39,27 @@ module FormCore::Concerns
       def interpret_to(model, overrides: {})
         check_model_validity!(model)
 
-        accessibility = overrides.fetch(:accessibility, self.accessibility)
-        return model if accessibility == :hidden
-
         default_value = overrides.fetch(:default_value, self.default_value)
         model.attribute name, stored_type, default: default_value
 
-        if accessibility == :readonly
-          model.attr_readonly name
-        end
-
-        interpret_validations_to model, accessibility, overrides
-        interpret_extra_to model, accessibility, overrides
+        interpret_validations_to model, overrides
+        interpret_extra_to model, overrides
 
         model
       end
 
       protected
 
-      def interpret_validations_to(model, accessibility, overrides = {})
+      def interpret_validations_to(model, overrides = {})
         validations = overrides.fetch(:validations, (self.validations || {}))
         validation_options = overrides.fetch(:validation_options) { self.options.fetch(:validation, {}) }
 
-        if accessibility == :read_and_write && validations.present?
+        if validations.present?
           model.validates name, **validations, **validation_options
         end
       end
 
-      def interpret_extra_to(_model, _accessibility, _overrides = {})
+      def interpret_extra_to(_model, _overrides = {})
       end
 
       def check_model_validity!(model)

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    form_core (0.0.14)
+    form_core_v1 (0.0.14)
       duck_record (~> 0)
       rails (~> 5.0)
 
@@ -64,7 +64,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     crass (1.0.3)
-    duck_record (0.0.21)
+    duck_record (0.0.22)
       activemodel (~> 5.0)
       activesupport (~> 5.0)
     erubi (1.7.0)
@@ -176,7 +176,7 @@ DEPENDENCIES
   bulma-rails
   cocoon
   coffee-rails (~> 4.2)
-  form_core!
+  form_core_v1!
   jquery-rails
   pry-byebug
   pry-rails
@@ -190,4 +190,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.16.0
+   1.16.1

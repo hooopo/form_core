@@ -7,7 +7,7 @@ require "form_core/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "form_core"
+  s.name        = "form_core_v1"
   s.version     = FormCore::VERSION
   s.authors     = ["jasl"]
   s.email       = ["jasl9187@hotmail.com"]
